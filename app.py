@@ -80,7 +80,11 @@ Be accurate and fair in your scoring."""
             max_tokens = 250
         
         # Call Claude API
-        client = anthropic.Anthropic()
+        api_key = os.getenv('ANTHROPIC_API_KEY')
+        if not api_key:
+            return jsonify({'error': 'ANTHROPIC_API_KEY environment variable not set'}), 500
+
+        client = anthropic.Anthropic(api_key=api_key)
         
         # Build message content dynamically
         message_content = []
