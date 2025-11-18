@@ -45,6 +45,8 @@ This version includes speed optimizations while maintaining grading accuracy:
 
 ## 🔧 Setup Instructions
 
+### Local Development
+
 1. **Install Dependencies**
    ```bash
    pip install -r requirements.txt
@@ -65,9 +67,37 @@ This version includes speed optimizations while maintaining grading accuracy:
    http://localhost:5000
    ```
 
-5. **Upload Images**
+5. **Upload or Capture Images**
    - Reference Answer: Optional - provides a model answer for comparison
    - Student Answer: Required - the response to grade
+   - Use Upload mode for existing images or Camera mode to capture live
+
+### Railway Deployment
+
+1. **Push to GitHub**
+   ```bash
+   git add .
+   git commit -m "Ready for Railway deployment"
+   git push origin main
+   ```
+
+2. **Deploy on Railway**
+   - Go to [Railway.app](https://railway.app)
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your `Maxwell` repository
+   - Railway will auto-detect the Flask app
+
+3. **Set Environment Variable**
+   - In Railway dashboard, go to your project
+   - Click "Variables" tab
+   - Add variable: `ANTHROPIC_API_KEY` = `your-api-key-here`
+
+4. **Deploy**
+   - Railway will automatically deploy
+   - Get your public URL from the Railway dashboard
+   - Your app will be live at `https://your-app.railway.app`
+
+**Note**: Railway uses the `Procfile` to run the app with Gunicorn for production.
 
 ## 💡 Usage Tips
 
