@@ -59,11 +59,13 @@ ADDITIONAL CONTEXT:
 {image_instruction}
 
 SCORING RULES (APPLY STRICTLY):
-1. Wrong final answer = MAXIMUM 5/10, regardless of how good the reasoning is
+1. Correct final answer required for 8-10/10 range
 2. Correct final answer + correct reasoning = 9-10/10
-3. Correct final answer + minor errors in reasoning = 7-8/10
-4. Wrong final answer + correct method = 3-5/10
-5. Wrong final answer + wrong method = 0-2/10
+3. Correct final answer + minor errors in reasoning = 8/10
+4. Wrong final answer + near-perfect methodology = MAX 7/10
+5. Wrong final answer + good methodology = MAX 5-6/10
+6. Wrong final answer + flawed methodology = MAX 3-4/10
+7. Wrong final answer + wrong method = 0-2/10
 
 A "wrong final answer" means:
 - Incorrect numerical value (e.g., -3 when correct answer is -1)
@@ -75,6 +77,14 @@ Partial credit is ONLY awarded for:
 - Correct methodology applied incorrectly
 - Minor calculation errors with correct approach
 - Incomplete but accurate partial solutions
+
+DO NOT deduct points for:
+- Handwriting quality or neatness
+- Grammar or spelling errors
+- Organization or formatting of the answer
+- Presentation style
+
+Focus ONLY on the scientific accuracy and reasoning.
 
 Please grade the student's response on a 0-10 scale with detailed feedback:
 1. Score with justification (explicitly state if final answer matches reference when applicable)
@@ -102,11 +112,15 @@ CONTEXT: {context if context else "None"}
 {image_instruction}
 
 SCORING RULES:
-- Wrong final answer = MAX 5/10 (even with good reasoning)
+- Correct final answer required for 8-10/10
 - Correct answer + correct work = 9-10/10
-- Correct answer + minor errors = 7-8/10
-- Wrong answer + correct method = 3-5/10
+- Correct answer + minor errors = 8/10
+- Wrong answer + near-perfect method = MAX 7/10
+- Wrong answer + good method = MAX 5-6/10
+- Wrong answer + flawed method = MAX 3-4/10
 - Wrong answer + wrong method = 0-2/10
+
+DO NOT deduct points for handwriting, grammar, spelling, or formatting. Only grade scientific accuracy and reasoning.
 
 Format:
 Score: X/10
