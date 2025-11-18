@@ -119,6 +119,7 @@ Be accurate and fair in your scoring."""
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=max_tokens,
+            temperature=0,
             messages=[
                 {
                     "role": "user",
