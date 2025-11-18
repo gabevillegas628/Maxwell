@@ -124,9 +124,13 @@ Be strict and consistent."""
         
         # Build message content dynamically
         message_content = []
-        
-        # Add reference image if provided (this goes first)
+
+        # Add reference image if provided (with explicit label)
         if reference_image:
+            message_content.append({
+                "type": "text",
+                "text": "=== REFERENCE ANSWER (CORRECT SOLUTION) - IMAGE BELOW ==="
+            })
             message_content.append({
                 "type": "image",
                 "source": {
@@ -135,8 +139,16 @@ Be strict and consistent."""
                     "data": reference_image,
                 },
             })
-        
-        # Always add student image (this goes second)
+            message_content.append({
+                "type": "text",
+                "text": "=== END OF REFERENCE ANSWER ===\n\n"
+            })
+
+        # Always add student image (with explicit label)
+        message_content.append({
+            "type": "text",
+            "text": "=== STUDENT'S ANSWER (TO BE GRADED) - IMAGE BELOW ==="
+        })
         message_content.append({
             "type": "image",
             "source": {
@@ -145,7 +157,11 @@ Be strict and consistent."""
                 "data": student_image,
             },
         })
-        
+        message_content.append({
+            "type": "text",
+            "text": "=== END OF STUDENT'S ANSWER ===\n\n"
+        })
+
         # Add text prompt (this goes last)
         message_content.append({
             "type": "text",
