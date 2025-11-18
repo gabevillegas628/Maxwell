@@ -50,6 +50,13 @@ ADDITIONAL CONTEXT (IMPORTANT GRADING INSTRUCTIONS - FOLLOW THESE):
 
 {image_instruction}
 
+CRITICAL - READ CAREFULLY:
+Before grading, carefully examine the student's work. Pay close attention to:
+- Numerical values (read them exactly as written - don't misread digits)
+- Units (µM vs mM, µg vs mg, etc. - be precise, these are different by 1000x)
+- Mathematical operations shown
+- Chemical formulas and structures
+
 GRADING INSTRUCTIONS:
 1. The rubric defines the scoring criteria - follow it carefully
 2. The ADDITIONAL CONTEXT contains critical instructions about how to apply the rubric (e.g., partial credit policies, what to emphasize) - you MUST follow these instructions
@@ -79,6 +86,11 @@ RUBRIC (SCORING CRITERIA): {rubric if rubric else "Standard biochemistry criteri
 ADDITIONAL CONTEXT (GRADING INSTRUCTIONS - FOLLOW THESE): {context if context else "None"}
 
 {image_instruction}
+
+READ CAREFULLY - Pay close attention to:
+- Numerical values (exact digits as written)
+- Units (µM vs mM, µg vs mg - be precise, different by 1000x)
+- Mathematical operations and formulas shown
 
 CRITICAL RULES:
 - Follow the rubric for what to assess
@@ -135,7 +147,7 @@ Follow the rubric according to the grading philosophy described in the context."
         message = client.messages.create(
             model="claude-sonnet-4-20250514",
             max_tokens=max_tokens,
-            temperature=0.3,  # Lower temperature for more consistent, strict grading
+            temperature=0,  # Zero temperature for maximum consistency in grading
             messages=[
                 {
                     "role": "user",
