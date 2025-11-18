@@ -45,70 +45,51 @@ h1 {
     text-align: center;
 }
 
-.toggle-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 15px;
-    cursor: pointer;
-    position: relative;
-}
-
-.toggle-label input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.toggle-slider {
-    width: 60px;
-    height: 30px;
-    background: #4CAF50;
-    border-radius: 15px;
-    position: relative;
-    transition: background 0.3s;
-}
-
-.toggle-slider::before {
-    content: '';
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 50%;
-    top: 3px;
-    left: 3px;
-    transition: transform 0.3s;
-}
-
-.toggle-label input:checked + .toggle-slider {
-    background: #667eea;
-}
-
-.toggle-label input:checked + .toggle-slider::before {
-    transform: translateX(30px);
-}
-
-.toggle-text {
+.mode-label {
     font-size: 1.1em;
     font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
 }
 
-.mode-concise {
-    color: #4CAF50;
+.mode-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
 }
 
-.mode-verbose {
-    color: #667eea;
-    display: none;
+.grading-mode-btn {
+    padding: 12px 24px;
+    border: 2px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
 }
 
-.toggle-label input:checked ~ .toggle-text .mode-concise {
-    display: none;
+.grading-mode-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
 }
 
-.toggle-label input:checked ~ .toggle-text .mode-verbose {
-    display: inline;
+.grading-mode-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.grading-mode-btn .mode-time {
+    font-size: 0.8em;
+    font-weight: normal;
+    opacity: 0.8;
 }
 
 .mode-description {
@@ -275,13 +256,18 @@ textarea:focus {
     margin-bottom: 15px;
 }
 
-.mode-badge.concise {
+.mode-badge.fast {
     background: #4CAF50;
     color: white;
 }
 
-.mode-badge.verbose {
+.mode-badge.detailed {
     background: #667eea;
+    color: white;
+}
+
+.mode-badge.answer-sheet {
+    background: #ff9800;
     color: white;
 }
 

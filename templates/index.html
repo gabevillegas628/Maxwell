@@ -14,15 +14,22 @@
         </header>
 
         <div class="mode-toggle">
-            <label class="toggle-label">
-                <input type="checkbox" id="verboseMode">
-                <span class="toggle-slider"></span>
-                <span class="toggle-text">
-                    <span class="mode-concise">⚡ Fast Mode (3-5 sec)</span>
-                    <span class="mode-verbose">📝 Detailed Mode (10-15 sec)</span>
-                </span>
-            </label>
-            <p class="mode-description">Fast mode provides quick scores with brief justification. Detailed mode includes comprehensive feedback.</p>
+            <p class="mode-label">Grading Mode:</p>
+            <div class="mode-buttons">
+                <button class="grading-mode-btn active" data-mode="fast">
+                    ⚡ Fast
+                    <span class="mode-time">(3-5 sec)</span>
+                </button>
+                <button class="grading-mode-btn" data-mode="detailed">
+                    📝 Detailed
+                    <span class="mode-time">(10-15 sec)</span>
+                </button>
+                <button class="grading-mode-btn" data-mode="answer_sheet">
+                    📋 Answer Sheet
+                    <span class="mode-time">(5-8 sec)</span>
+                </button>
+            </div>
+            <p class="mode-description" id="modeDescription">Fast mode provides quick scores with brief justification.</p>
         </div>
 
         <div class="input-section">

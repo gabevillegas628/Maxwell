@@ -1,5 +1,6 @@
 let referenceImage = null;
 let studentImage = null;
+let currentGradingMode = 'fast'; // 'fast', 'detailed', or 'answer_sheet'
 
 // Camera streams
 let referenceStream = null;
@@ -16,8 +17,8 @@ const gradeButton = document.getElementById('gradeButton');
 const resultsDiv = document.getElementById('results');
 const feedbackDiv = document.getElementById('feedback');
 const loadingDiv = document.getElementById('loading');
-const verboseModeToggle = document.getElementById('verboseMode');
 const modeBadge = document.getElementById('modeBadge');
+const modeDescription = document.getElementById('modeDescription');
 
 // Camera elements
 const referenceCamera = document.getElementById('referenceCamera');
@@ -30,6 +31,28 @@ const referenceCaptureBtn = document.getElementById('referenceCaptureBtn');
 const studentCaptureBtn = document.getElementById('studentCaptureBtn');
 const referenceFlipBtn = document.getElementById('referenceFlipBtn');
 const studentFlipBtn = document.getElementById('studentFlipBtn');
+
+// Grading mode button handlers
+document.querySelectorAll('.grading-mode-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.grading-mode-btn').forEach(b => b.classList.remove('active'));
+
+        // Add active class to clicked button
+        this.classList.add('active');
+
+        // Update current mode
+        currentGradingMode = this.dataset.mode;
+
+        // Update description
+        const descriptions = {
+            'fast': 'Fast mode provides quick scores with brief justification.',
+            'detailed': 'Detailed mode includes comprehensive feedback with methodology analysis.',
+            'answer_sheet': 'Answer sheet mode compares numbered answers directly and lists incorrect responses. Requires reference image.'
+        };
+        modeDescription.textContent = descriptions[currentGradingMode];
+    });
+});
 
 // Image compression function
 async function compressImage(base64Image, maxWidth = 1920, quality = 0.8) {
@@ -164,13 +187,12 @@ function updateGradeButton() {
 gradeButton.addEventListener('click', async () => {
     const rubric = document.getElementById('rubric').value;
     const context = document.getElementById('context').value;
-    const verboseMode = verboseModeToggle.checked;
-    
+
     // Show loading
     loadingDiv.style.display = 'block';
     resultsDiv.style.display = 'none';
     gradeButton.disabled = true;
-    
+
     try {
         const response = await fetch('/grade', {
             method: 'POST',
@@ -182,22 +204,24 @@ gradeButton.addEventListener('click', async () => {
                 context: context,
                 referenceImage: referenceImage,
                 studentImage: studentImage,
-                verboseMode: verboseMode
+                gradingMode: currentGradingMode
             })
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok) {
             // Update mode badge
-            if (data.mode === 'verbose') {
-                modeBadge.textContent = '📝 Detailed Mode';
-                modeBadge.className = 'mode-badge verbose';
-            } else {
-                modeBadge.textContent = '⚡ Fast Mode';
-                modeBadge.className = 'mode-badge concise';
-            }
-            
+            const modeBadges = {
+                'fast': { text: '⚡ Fast Mode', class: 'mode-badge fast' },
+                'detailed': { text: '📝 Detailed Mode', class: 'mode-badge detailed' },
+                'answer_sheet': { text: '📋 Answer Sheet Mode', class: 'mode-badge answer-sheet' }
+            };
+
+            const badge = modeBadges[data.mode] || modeBadges['fast'];
+            modeBadge.textContent = badge.text;
+            modeBadge.className = badge.class;
+
             feedbackDiv.textContent = data.feedback;
             resultsDiv.style.display = 'block';
         } else {

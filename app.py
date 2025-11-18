@@ -22,8 +22,8 @@ def grade():
         context = data.get('context', '')
         reference_image = data.get('referenceImage', '')
         student_image = data.get('studentImage', '')
-        verbose_mode = data.get('verboseMode', False)
-        
+        grading_mode = data.get('gradingMode', 'fast')  # 'fast', 'detailed', or 'answer_sheet'
+
         if not student_image:
             return jsonify({'error': 'Student answer image is required'}), 400
         
@@ -34,7 +34,37 @@ def grade():
             student_image = student_image.split(',')[1]
         
         # Build the prompt based on mode
-        if verbose_mode:
+        if grading_mode == 'answer_sheet':
+            # Answer Sheet Comparison Mode - requires reference image
+            if not reference_image:
+                return jsonify({'error': 'Answer sheet mode requires a reference answer image'}), 400
+
+            prompt = f"""Compare these two answer sheets.
+
+REFERENCE IMAGE: Shows the CORRECT ANSWERS
+STUDENT IMAGE: Shows the STUDENT'S ANSWERS to grade
+
+{f"CONTEXT: {context}" if context else ""}
+{f"GRADING NOTES: {rubric}" if rubric else ""}
+
+INSTRUCTIONS:
+1. Compare each numbered/labeled answer directly between the two sheets
+2. Count total correct vs incorrect answers
+3. List ONLY the incorrect answers with question number, student's answer, and correct answer
+4. Convert to a score out of 10
+
+FORMAT:
+Score: X/Y correct (Z/10)
+Incorrect Answers:
+- Q#: Student put "[answer]" | Correct: "[answer]"
+- Q#: Student put "[answer]" | Correct: "[answer]"
+[etc.]
+
+If all answers are correct, just say "All answers correct! 10/10"
+
+Be precise with question numbers and answers. Ignore handwriting quality."""
+            max_tokens = 400
+        elif grading_mode == 'detailed':
             if reference_image:
                 image_instruction = """The first image shows the REFERENCE ANSWER (the correct solution).
 The second image shows the STUDENT'S ANSWER (the response to grade).
@@ -198,7 +228,7 @@ Be strict and consistent."""
         
         return jsonify({
             'feedback': feedback,
-            'mode': 'verbose' if verbose_mode else 'concise'
+            'mode': grading_mode
         })
         
     except Exception as e:
