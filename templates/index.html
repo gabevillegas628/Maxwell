@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Biochemistry Grading Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧬 AI Biochemistry Grading Assistant</h1>
+            <p class="subtitle">Upload reference answer and student response for instant AI grading</p>
+        </header>
+
+        <div class="mode-toggle">
+            <label class="toggle-label">
+                <input type="checkbox" id="verboseMode">
+                <span class="toggle-slider"></span>
+                <span class="toggle-text">
+                    <span class="mode-concise">⚡ Fast Mode (3-5 sec)</span>
+                    <span class="mode-verbose">📝 Detailed Mode (10-15 sec)</span>
+                </span>
+            </label>
+            <p class="mode-description">Fast mode provides quick scores with brief justification. Detailed mode includes comprehensive feedback.</p>
+        </div>
+
+        <div class="input-section">
+            <div class="rubric-section">
+                <label for="rubric">Grading Rubric (Optional)</label>
+                <textarea id="rubric" placeholder="Enter specific grading criteria, point allocations, or what you're looking for in a correct answer..."></textarea>
+            </div>
+
+            <div class="context-section">
+                <label for="context">Additional Context (Optional)</label>
+                <textarea id="context" placeholder="Any additional context about the question, class level, specific topics covered, etc..."></textarea>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-column">
+                <h3>Reference Answer (Optional)</h3>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="upload" data-target="reference">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Upload
+                    </button>
+                    <button class="mode-btn" data-mode="camera" data-target="reference">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        Camera
+                    </button>
+                </div>
+                <div class="upload-area" id="referenceUpload">
+                    <div class="upload-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag & drop or click to upload</p>
+                        <span class="file-types">PNG, JPG, JPEG</span>
+                    </div>
+                    <input type="file" id="referenceInput" accept="image/*" hidden>
+                    <div class="image-preview" id="referencePreview"></div>
+                </div>
+                <div class="camera-area" id="referenceCamera" style="display: none;">
+                    <video id="referenceVideo" class="camera-preview" autoplay playsinline></video>
+                    <div class="camera-controls">
+                        <button class="camera-btn capture-btn" id="referenceCaptureBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                            Take Photo
+                        </button>
+                        <button class="camera-btn flip-btn" id="referenceFlipBtn" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Flip
+                        </button>
+                    </div>
+                    <canvas id="referenceCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+
+            <div class="upload-column">
+                <h3>Student Answer</h3>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="upload" data-target="student">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Upload
+                    </button>
+                    <button class="mode-btn" data-mode="camera" data-target="student">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        Camera
+                    </button>
+                </div>
+                <div class="upload-area" id="studentUpload">
+                    <div class="upload-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Drag & drop or click to upload</p>
+                        <span class="file-types">PNG, JPG, JPEG</span>
+                    </div>
+                    <input type="file" id="studentInput" accept="image/*" hidden>
+                    <div class="image-preview" id="studentPreview"></div>
+                </div>
+                <div class="camera-area" id="studentCamera" style="display: none;">
+                    <video id="studentVideo" class="camera-preview" autoplay playsinline></video>
+                    <div class="camera-controls">
+                        <button class="camera-btn capture-btn" id="studentCaptureBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                            Take Photo
+                        </button>
+                        <button class="camera-btn flip-btn" id="studentFlipBtn" style="display: none;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Flip
+                        </button>
+                    </div>
+                    <canvas id="studentCanvas" style="display: none;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <button id="gradeButton" class="grade-button" disabled>Grade Response</button>
+
+        <div id="results" class="results-section" style="display: none;">
+            <h3>Grading Results</h3>
+            <div class="mode-badge" id="modeBadge"></div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing response...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
