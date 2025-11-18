@@ -40,31 +40,31 @@ def grade():
             else:
                 image_instruction = "The image shows the STUDENT'S ANSWER."
             
-            prompt = f"""You are grading a biochemistry exam question. The RUBRIC is your PRIMARY authority for scoring.
+            prompt = f"""You are grading a biochemistry exam question. Follow BOTH the rubric AND the additional context instructions.
 
-RUBRIC (FOLLOW THIS STRICTLY):
+RUBRIC (PRIMARY SCORING CRITERIA):
 {rubric if rubric else "Use standard biochemistry grading criteria"}
 
-ADDITIONAL CONTEXT:
+ADDITIONAL CONTEXT (IMPORTANT GRADING INSTRUCTIONS - FOLLOW THESE):
 {context if context else "None provided"}
 
 {image_instruction}
 
 GRADING INSTRUCTIONS:
-1. The rubric defines what is required for points - follow it exactly
-2. If the rubric specifies criteria for full points, the student MUST meet those criteria
-3. Fundamental errors (wrong operations, wrong formulas, wrong constants, conceptual mistakes) should result in losing most/all points for that section
-4. Missing work or blank answers should receive minimal to zero points unless partial credit is explicitly warranted
-5. Do NOT be lenient on major errors - if the student made a critical mistake, reflect that in the score
-6. Only award points for what the student actually demonstrated correctly according to the rubric
+1. The rubric defines the scoring criteria - follow it carefully
+2. The ADDITIONAL CONTEXT contains critical instructions about how to apply the rubric (e.g., partial credit policies, what to emphasize) - you MUST follow these instructions
+3. If context says to give partial credit for attempted work, do so even if the final answer is wrong
+4. Fundamental errors (wrong operations, wrong formulas, wrong constants) should result in significant deductions UNLESS the context specifies otherwise
+5. Missing/blank work receives minimal points UNLESS the context specifies partial credit for attempts
+6. Balance strictness with the grading philosophy described in the additional context
 
 Grade the student's response on a scale of 0-10 and provide detailed feedback including:
-1. Score with justification (reference specific rubric criteria)
+1. Score with justification (reference both rubric criteria and context instructions)
 2. What was done well
 3. What was missing or incorrect
 4. Specific suggestions for improvement
 
-Hold the student to the rubric's standards. Do not give points the student has not earned."""
+Follow the rubric strictly, but apply it according to the grading philosophy in the additional context."""
             max_tokens = 1024
         else:
             # Concise mode - optimized for speed
@@ -73,24 +73,26 @@ Hold the student to the rubric's standards. Do not give points the student has n
             else:
                 image_instruction = "The image shows the STUDENT'S ANSWER"
 
-            prompt = f"""You are grading a biochemistry exam. The rubric is your PRIMARY scoring authority - follow it strictly.
+            prompt = f"""You are grading a biochemistry exam. Follow BOTH the rubric AND the context instructions.
 
-RUBRIC (FOLLOW EXACTLY): {rubric if rubric else "Standard biochemistry criteria"}
-CONTEXT: {context if context else "None"}
+RUBRIC (SCORING CRITERIA): {rubric if rubric else "Standard biochemistry criteria"}
+ADDITIONAL CONTEXT (GRADING INSTRUCTIONS - FOLLOW THESE): {context if context else "None"}
 
 {image_instruction}
 
 CRITICAL RULES:
-- Award points ONLY for what the student correctly demonstrated per the rubric
-- Fundamental errors (wrong operation/formula/constant/reasoning) = lose most/all points for that section
-- Missing/blank answers = minimal to zero points
-- Do NOT be lenient - hold student to rubric standards
+- Follow the rubric for what to assess
+- The CONTEXT contains important instructions (e.g., partial credit policies) - you MUST follow these
+- If context says give partial credit for attempts, do so even if answer is wrong
+- Fundamental errors = significant deductions UNLESS context specifies otherwise
+- Missing/blank answers = minimal points UNLESS context allows credit for attempts
+- Balance rubric strictness with the grading philosophy in the context
 
 Provide your assessment in this EXACT format:
 Score: X/10
-Reasoning: [2-3 sentences - reference rubric criteria, identify errors, justify score]
+Reasoning: [2-3 sentences - apply rubric according to context instructions, identify what was done/missing, justify score]
 
-Only give points the student has earned according to the rubric."""
+Follow the rubric according to the grading philosophy described in the context."""
             max_tokens = 250
         
         # Call Claude API
