@@ -50,6 +50,11 @@ ADDITIONAL CONTEXT:
 
 {image_instruction}
 
+IMPORTANT - Distinguish between partial work and wrong answers:
+- Partial credit: Correct approach/reasoning that's incomplete or has minor errors
+- Wrong final answer: A factually incorrect final answer (e.g., -3 when answer is -1, or acrylamide when answer is SDS) must result in significant point deduction, even if reasoning shows some understanding
+- Award partial credit for demonstrated understanding, but do not give full points for incorrect final answers
+
 Please grade the student's response on a scale of 0-10 and provide detailed feedback including:
 1. Score with justification
 2. What was done well
@@ -71,6 +76,8 @@ RUBRIC: {rubric if rubric else "Standard biochemistry criteria"}
 CONTEXT: {context if context else "None"}
 
 {image_instruction}
+
+IMPORTANT - Wrong final answer (e.g., -3 when answer is -1, acrylamide when answer is SDS) = significant deduction, even if reasoning shows understanding. Award partial credit for correct approach, but not full points for incorrect finals.
 
 Provide your assessment in this EXACT format:
 Score: X/10
